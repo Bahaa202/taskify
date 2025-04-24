@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taskify - To-Do List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .input-section {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    #task-input {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    #add-btn {
+      background-color: #0A74DA;
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #add-btn:hover {
+      background-color: #0559b8;
+    }
+
+    .task-card {
+      background-color: white;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .task-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .task-text {
+      font-size: 16px;
+      outline: none;
+    }
+
+    .task-text.completed {
+      text-decoration: line-through;
+      color: #aaa;
+    }
+
+    .task-actions button {
+      background-color: #FF4C4C;
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+      border: none;
+      padding: 5px 10px;
+      margin-left: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .task-actions button:hover {
+      background-color: #e63a3a;
+    }
+
+    .task-status {
+      font-size: 12px;
+      color: #555;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+    <h1>Taskify - To-Do List</h1>
+  <div class="container">
+    <div class="input-section">
+      <input type="text" id="task-input" placeholder="Add a new task...">
+      <button id="add-btn">Add</button>
+    </div>
+    <div id="task-list"></div>
+  </div>
+
+  <script>
+    const taskInput = document.getElementById('task-input');
+    const addBtn = document.getElementById('add-btn');
+    const taskList = document.getElementById('task-list');
+
+    addBtn.addEventListener('click', () => {
+      const taskText = taskInput.value.trim();
+      if (taskText !== '') {
+        addTask(taskText);
+        taskInput.value = '';
+      }
+    });
+
+    function addTask(text) {
+      const taskCard = document.createElement('div');
+      taskCard.className = 'task-card';
+
+      const taskLeft = document.createElement('div');
+      taskLeft.className = 'task-left';
+
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.title = 'Mark complete';
+
+      const taskText = document.createElement('span');
+      taskText.className = 'task-text';
+      taskText.contentEditable = true;
+      taskText.textContent = text;
+
+      const status = document.createElement('span');
+      status.className = 'task-status';
+      status.textContent = '(Pending)';
+
+      checkbox.addEventListener('change', () => {
+        taskText.classList.toggle('completed');
+        status.textContent = checkbox.checked ? '(Done)' : '(Pending)';
+      });
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = 'Delete';
+      deleteBtn.addEventListener('click', () => {
+        taskCard.style.opacity = 0;
+        setTimeout(() => taskCard.remove(), 300);
+      });
+
+      const taskActions = document.createElement('div');
+      taskActions.className = 'task-actions';
+      taskActions.appendChild(deleteBtn);
+
+      taskLeft.appendChild(checkbox);
+      taskLeft.appendChild(taskText);
+      taskLeft.appendChild(status);
+
+      taskCard.appendChild(taskLeft);
+      taskCard.appendChild(taskActions);
+
+      taskList.appendChild(taskCard);
+    }
+  </script>
+</body>
+</html>
